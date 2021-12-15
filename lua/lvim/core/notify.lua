@@ -29,6 +29,10 @@ function M.config()
   }
 end
 
+function M.setup()
+  require("notify.config").setup(lvim.builtin.notify.opts)
+end
+
 M.params_injecter = function(_, entry)
   -- FIXME: this is currently getting ignored or is not passed correctly
   for key, value in pairs(lvim.builtin.notify.opts) do

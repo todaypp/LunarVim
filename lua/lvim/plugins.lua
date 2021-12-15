@@ -1,3 +1,5 @@
+local core_plugin_type = require "lvim.core_plugin_type"
+
 local commit = {
   barbar = "6e638309efcad2f308eb9c5eaccf6f62b794bbab",
   cmp_buffer = "a0fe52489ff6e235d62407f8fa72aef80222040a",
@@ -33,9 +35,10 @@ local commit = {
   telescope_fzf_native = "b8662b076175e75e6497c59f3e2799b879d7b954",
   toggleterm = "265bbff68fbb8b2a5fb011272ec469850254ec9f",
   which_key = "0fd9de78fe09215e1b7c6173ff1b0b90c8ed6ec4",
+  dashboard_nvim = "d82ddae95fd4dc4c3b7bbe87f09b1840fbf20ecb",
 }
 
-return {
+local plugins = {
   -- Packer can manage itself as an optional plugin
   { "wbthomason/packer.nvim", commit = commit.packer },
   { "neovim/nvim-lspconfig", commit = commit.nvim_lspconfig },
@@ -52,6 +55,9 @@ return {
   {
     "rcarriga/nvim-notify",
     commit = commit.nvim_notify,
+    config = function()
+      require("lvim.core.notify").setup()
+    end,
     disable = not lvim.builtin.notify.active,
   },
   { "Tastyep/structlog.nvim", commit = commit.structlog },
@@ -249,6 +255,7 @@ return {
   -- Dashboard
   {
     "ChristianChiarulli/dashboard-nvim",
+    commit = commit.dashboard_nvim,
     event = "BufWinEnter",
     config = function()
       require("lvim.core.dashboard").setup()
@@ -267,3 +274,9 @@ return {
     disable = not lvim.builtin.terminal.active,
   },
 }
+
+for _, plugin in ipairs(plugins) do
+  core_plugin_type.setup(plugin)
+end
+
+return plugins
